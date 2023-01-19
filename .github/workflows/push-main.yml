@@ -1,0 +1,46 @@
+name: Build Main
+
+on:
+  pull_request:
+    branches:
+      - production
+    types:
+      - closed
+
+jobs:
+  build-production:
+    if: ${{ github.event.pull_request.merged && github.triggering_actor == 'shopify[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Reset main branch
+        run: |
+          git fetch origin production:production
+          git reset --hard production
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Run build decompile
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build-decompile
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Build for main
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: main-build
+          signoff: true
+          delete-branch: true
+          title: 'Build decompile for main'
+          body: |
+            [Bot] Main update
+            - Auto-generated
+          assignees: alexgaudiosi
+          reviewers: alexgaudiosi
+          draft: false
