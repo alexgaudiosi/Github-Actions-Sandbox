@@ -28,9 +28,9 @@ jobs:
           commit-message: Build for production
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
+          signoff: true
           branch: build-production
-          delete-branch: true
+          delete-branch: false
           title: 'Build for production'
           base: production
           body: |
