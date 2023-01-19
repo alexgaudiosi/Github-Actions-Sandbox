@@ -43,6 +43,7 @@ jobs:
           branch: build-production
           delete-branch: true
           title: 'Build for production'
+          base: production
           body: |
             [Bot] Production update
             - Updated with *today's* date
