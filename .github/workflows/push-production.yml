@@ -20,7 +20,13 @@ jobs:
     if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3   
+      - uses: actions/checkout@v3
+        with:
+          ref: production
+      - name: Reset production branch
+        run: |
+          git fetch origin main:main
+          git reset --hard main
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
@@ -28,11 +34,10 @@ jobs:
           commit-message: Build for production
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
-          branch: build-production
-          delete-branch: true
+          branch: production-build
+          signoff: true
+          delete-branch: false
           title: 'Build for production'
-          base: production
           body: |
             [Bot] Production update
             - Updated with *today's* date
