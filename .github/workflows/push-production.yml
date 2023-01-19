@@ -44,7 +44,7 @@ jobs:
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           branch: production-build
           signoff: true
-          delete-branch: false
+          delete-branch: true
           title: 'Build for production'
           body: |
             [Bot] Production update
